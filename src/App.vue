@@ -6,154 +6,6 @@
           <v-row>
             <v-col
                 cols="12"
-                sm="4"
-                class="px-0 py-0"
-            >
-              <v-sheet
-                  height="85vh"
-                  class="contacts-wrapper rounded-bl-lg rounded-tl-lg"
-              >
-                <v-card
-                    flat
-                    class="transparent"
-                >
-                  <v-navigation-drawer
-                      v-model="drawer"
-                      absolute
-                      temporary
-                  >
-                    <v-list>
-                      <v-list-item class="px-2">
-                        <v-list-item-avatar size="60">
-                          <v-img src="https://randomuser.me/api/portraits/men/1.jpg"></v-img>
-                        </v-list-item-avatar>
-                      </v-list-item>
-
-                      <v-list-item
-                          link
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title class="title navigation-item">
-                            Alan Walker
-                          </v-list-item-title>
-                          <v-list-item-subtitle class="text-muted">+998-88-307-11-11</v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
-
-                    <v-divider></v-divider>
-
-                    <v-list
-                        nav
-                        dense
-                    >
-                      <v-list-item link>
-                        <v-list-item-icon>
-                          <v-icon>mdi-folder</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="navigation-item">My Files</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item link>
-                        <v-list-item-icon>
-                          <v-icon>mdi-account-multiple</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="navigation-item">Shared with me</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item link>
-                        <v-list-item-icon>
-                          <v-icon>mdi-star</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="navigation-item">Starred</v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-navigation-drawer>
-                  <header class="rounded-0 px-5 pt-3">
-                    <div class="d-flex flex-column header-wrapper">
-                      <div class="d-flex justify-space-between">
-                        <div class="system-btn">
-                          <button class="btn close-button"><span>X</span></button>
-                          <button class="btn minimize-button"><span>-</span></button>
-                          <button class="btn expand-button"><span>+</span></button>
-                        </div>
-
-                      </div>
-                    </div>
-                  </header>
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        sm="3"
-                        class="pr-0 py-0 pt-5"
-                    >
-                      <v-tab>
-                        <v-app-bar-nav-icon
-                          @click="drawer = true"
-                        ></v-app-bar-nav-icon>
-                      </v-tab>
-
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="9"
-                        class="pl-0 py-0 pt-5 d-flex align-center"
-                    >
-                      <label class="header-search">
-                        <i class="icon-search"></i>
-                        <input
-                            type="search"
-                            class="form-control"
-                            placeholder="Search"
-                            v-model="searchArea"
-                        >
-                      </label>
-                    </v-col>
-                  </v-row>
-                </v-card>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    sm="3"
-                    class="pr-0"
-                  >
-                    <v-sheet color="transparent" height="75vh" class="px-0 py-0 pt-5">
-                      <div class="folder-btn">
-                        <div class="button-top">
-                          <button
-                              class="tab-btn"
-                              v-for="(tab, index) in tabItems"
-                              :key="index"
-                          >
-                            <i :class="tab.icon"></i>
-                            <p v-text="tab.name"></p>
-                            <span class="tab-badge">{{ tab.notification }}</span>
-                          </button>
-                        </div>
-                        <div class="button-bottom">
-                          <button class="tab-btn">
-                            <i class="icon-settings"></i>
-                            <p>Settings</p>
-                          </button>
-                        </div>
-                      </div>
-                    </v-sheet>
-
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="9"
-                    class="pl-0"
-                  >
-                    <v-sheet color="transparent" height="60vh" class="py-0 px-0 user-list-wrapper">
-                      <user-item :search="searchArea" @getMessage="getMessageFromUser"></user-item>
-                    </v-sheet>
-
-                  </v-col>
-                </v-row>
-              </v-sheet>
-            </v-col>
-
-            <v-col
-                cols="12"
                 sm="5"
                 class="px-0 py-0"
             >
@@ -162,30 +14,21 @@
                   style="background-color: #1E1E1E; position: relative"
               >
                 <div class="message-wrapper">
-                  <header class="user-info" @click.stop="dialog = true">
+                  <header class="user-info">
                     <div class="user-info-wrapper">
                       <div class="personal-info">
                         <h4 class="user-info-name"  >
-                          {{ userInfo.fullName }}
+                          {{ "Caronas Taquara x Fundão" }}
                         </h4>
                         <p class="last-seen">{{userInfo.lastAct}}</p>
-                      </div>
-                      <div class="user-info-widgets">
-                        <button class="info-btn">
-                          <i class="icon-search"></i>
-                        </button>
-                        <button class="info-btn">
-                          <i class="icon-more_vertical"></i>
-                        </button>
                       </div>
                     </div>
                   </header>
                   <main class="message-area">
                     <div class="main-wrapper">
-                      <ul class="msg-list">
+                      <ul v-for="item in items" :key="item.message" class="msg-list">
                         <li class="chat-msg msg-receive">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, sint!
-                          <span class="message-time">20:20</span>
+                          {{ item.message }}
                           <i class="icon-check_all_big"></i>
                           <span class="close-button">x</span>
                         </li>
@@ -235,19 +78,6 @@
                 </div>
               </v-sheet>
             </v-col>
-
-            <v-col
-                cols="12"
-                sm="3"
-                class="px-0 py-0"
-            >
-              <v-sheet
-                  height="85vh"
-                  class="rounded-br-lg rounded-tr-lg users-information"
-              >
-                <user-info :userInfo="userInfo" />
-              </v-sheet>
-            </v-col>
           </v-row>
         </div>
       </v-container>
@@ -257,11 +87,10 @@
 
 <script>
 
-import UserItem from "@/components/users/UserItem";
 import UserInfo from "@/components/users/UserInfo";
 
 export default {
-  components: {UserItem, UserInfo},
+  components: {UserInfo},
   data: () => ({
     drawer: false,
     group: null,
@@ -273,7 +102,7 @@ export default {
     dialog: false,
     createdMessage: '',
     messages: [],
-    filteredMessages: '',
+    filteredMessages: [],
     userId: 1,
     userInfo: {
       fullName: '',
@@ -282,19 +111,61 @@ export default {
       phoneNumber: '',
       bio: '',
       lastAct: ''
-    }
+    },
+    starting_0: true,
+    starting_1: false,
+    starting_2: false,
+    items: []
+
   }),
   methods: {
+
+    start() {
+      const user_id = localStorage.getItem('user_id');
+      const username = localStorage.getItem('username')
+
+      if (user_id && username) {
+        this.starting_0 = false
+        this.starting_1 = false
+        this.starting_2 = false
+        this.items.push({ message: 'Digite o comando. Para ajuda, digite /help'})
+      }
+      else if (!username) {
+        this.items.push({ message: 'Digite o nome de usuário do Telegram'})
+        this.starting_1 = true
+      }
+      else if (!user_id) {
+        this.items.push({ message: 'Digite seu número de celular'})
+        this.starting_2 = true
+      }
+    },
+
     postMessage() {
       if (this.createdMessage.length > 0) {
+        console.log(this.starting_1)
+        if (this.starting_1) {
+          localStorage.setItem('username', this.createdMessage)
+          this.starting_1 = false
+        }
+
+        if (this.starting_2) {
+          localStorage.setItem('user_id', this.createdMessage)
+          this.starting_2 = false
+        }
+
+        this.filteredMessages.push({message: this.createdMessage});
+
         const messages = {
           message: this.createdMessage,
           time: this.getNow(),
           chat_id: this.userId
         }
 
-        this.$http.post('http://localhost:3000/messages', messages)
+        this.$http.headers.common['Access-Control-Allow-Origin'] = true
+
+        this.$http.post('https://caronastaquarabot-newstack.herokuapp.com/', messages)
             .then(response => {
+              this.items.push({message: response.text()})
               return response.json()
             })
             .then(newMessage => {
@@ -359,6 +230,7 @@ export default {
     }
   },
   created() {
+    this.start()
     this.loadMessages()
     this.getUserInfo(2)
   },
