@@ -26,9 +26,9 @@
                   </header>
                   <main class="message-area">
                     <div class="main-wrapper">
-                      <ul v-for="item in items" :key="item.message" class="msg-list">
-                        <li class="chat-msg msg-receive">
-                          {{ item.message }}
+                      <ul class="msg-list">
+                        <li v-for="item in items" :key="item.message" class="chat-msg msg-receive" v-html="item.message">
+
                           <i class="icon-check_all_big"></i>
                           <span class="close-button">x</span>
                         </li>
@@ -140,53 +140,58 @@ export default {
       }
     },
 
-    postMessage() {
+    async postMessage() {
+      console.log(this.createdMessage)
       if (this.createdMessage.length > 0) {
         console.log(this.starting_1)
         if (this.starting_1) {
           localStorage.setItem('username', this.createdMessage)
           this.starting_1 = false
+
+          this.filteredMessages.push({message: this.createdMessage});
+
+          this.createdMessage = ''
+          this.start()
         }
 
-        if (this.starting_2) {
+        else if (this.starting_2) {
           localStorage.setItem('user_id', this.createdMessage)
           this.starting_2 = false
+
+          this.filteredMessages.push({message: this.createdMessage});
+
+          this.createdMessage = ''
+          this.start()
         }
 
-        this.filteredMessages.push({message: this.createdMessage});
 
-        const messages = {
-          message: this.createdMessage,
-          time: this.getNow(),
-          chat_id: this.userId
+        if (!this.starting_0) {
+
+          const messages = {
+            message: {
+              from: {
+                username: localStorage.getItem('username'),
+                id: localStorage.getItem('user_id'),
+              },
+              chat: {
+                id: "-1001104177248"
+              },
+              text: this.createdMessage
+            }
+          }
+
+          const response_a = this.$http.post('https://caronastaquarabot-newstack.herokuapp.com/', messages)
+              .then(response => {
+                return response.text()
+              })
+
+          console.log(response_a)
+
+          this.createdMessage = ''
+
+          this.items.push({message: await response_a})
         }
-
-        this.$http.headers.common['Access-Control-Allow-Origin'] = true
-
-        this.$http.post('https://caronastaquarabot-newstack.herokuapp.com/', messages)
-            .then(response => {
-              this.items.push({message: response.text()})
-              return response.json()
-            })
-            .then(newMessage => {
-              this.loadMessages();
-              console.log(newMessage)
-            })
-
-        this.createdMessage = ''
       }
-    },
-    loadMessages() {
-      this.$http.get('http://localhost:3000/messages')
-          .then(response => {
-            console.log('response', response)
-            return response.json()
-          })
-          .then(messages => {
-            console.log('check message', messages)
-            this.messages = messages
-            this.getMessageFromUser(this.userId)
-          })
     },
     getNow: function() {
       let timestamp = '';
@@ -197,16 +202,6 @@ export default {
       console.log(timestamp)
       return today
     },
-    deleteMessage(id) {
-      this.$http.delete('http://localhost:3000/messages/'+id)
-          .then(response => {
-            return response.json()
-          })
-          .then(deletedMessage => {
-            this.loadMessages()
-            console.log(deletedMessage)
-          })
-    },
     getMessageFromUser(id) {
       this.userId = id;
       console.log('from app', id)
@@ -214,32 +209,10 @@ export default {
         return message.chat_id == id
       })
     },
-    getUserInfo(id) {
-      this.$http.get('http://localhost:3000/users/'+id)
-          .then(response => {
-            return response.json()
-          })
-          .then(userInfo => {
-            this.userInfo.fullName = userInfo.name;
-            this.userInfo.photoUrl = userInfo.avatar
-            this.userInfo.userName = userInfo.username
-            this.userInfo.phoneNumber = userInfo.phone
-            this.userInfo.bio = userInfo.bio
-            this.userInfo.lastAct = userInfo.activity
-          })
-    }
   },
   created() {
     this.start()
-    this.loadMessages()
-    this.getUserInfo(2)
   },
-  watch: {
-    userId: function (newVal) { // watch it
-      console.log('watched user id', newVal)
-      this.getUserInfo(newVal)
-    }
-  }
 };
 </script>
 
